@@ -1,7 +1,7 @@
 # Efecto del ciclo economico y la politica monetaria de EE.UU.
 ## sobre el sector externo de Costa Rica, 2015-2025
 
-Generado el 2026-09-09 por `main.py`. Muestra: 2015-01-01 a 2025-12-01, 132 observaciones mensuales.
+Generado el 2026-09-10 por `main.py`. Muestra: 2015-01-01 a 2025-12-01, 132 observaciones mensuales.
 
 **Todos los datos son reales.** Estados Unidos viene de FRED (Reserva Federal de San Luis) y Costa Rica de los cuadros publicados por el Banco Central de Costa Rica en su portal de indicadores economicos.
 

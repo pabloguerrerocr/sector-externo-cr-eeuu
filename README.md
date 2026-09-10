@@ -5,37 +5,48 @@ los dos canales por los que Estados Unidos afecta a una economía pequeña y abi
 el **canal real** (su ciclo económico mueve la demanda de exportaciones) y el
 **canal financiero** (la tasa de la Fed mueve los flujos de capital).
 
-El pipeline corre de punta a punta: descarga los datos, prueba raíces unitarias,
-prueba cointegración, estima el modelo, produce 19 figuras a 300 dpi y escribe un
-reporte en markdown.
+El pipeline corre de punta a punta: lee los datos, prueba raíces unitarias, prueba
+cointegración, estima tres bloques VAR/VECM, y produce 26 figuras a 300 dpi, 31
+tablas y un reporte en markdown.
 
 ## Resultado principal
 
-**El canal financiero domina al canal real en casi toda la línea.** A 24 meses,
-la tasa de fondos federales explica:
+**El canal financiero domina al canal real en las 14 combinaciones de variable y
+horizonte que produce el pipeline.** Porcentaje de la varianza del error de
+predicción atribuido a cada canal:
 
-| Variable de Costa Rica | Canal real | Canal financiero |
-|---|---:|---:|
-| Reservas internacionales | 3 % | **44 %** |
-| Tasa de política monetaria del BCCR | 1 % | **44 %** |
-| Tipo de cambio | 14 % | **40 %** |
-| Balance comercial | 3 % | 7 % |
+| Variable de Costa Rica | Bloque | Horizonte | Canal real | Canal financiero |
+|---|---|---:|---:|---:|
+| Reservas internacionales netas | financiero | 24 meses | 3,3 % | **44,4 %** |
+| Tasa de política monetaria del BCCR | financiero | 24 meses | 0,6 % | **43,9 %** |
+| ITCER (competitividad) | comercial | 24 meses | 4,5 % | **43,2 %** |
+| Exportaciones FOB | comercial | 24 meses | 6,2 % | 10,4 % |
+| Cuenta financiera de la balanza de pagos | balanza de pagos | 12 trimestres | 2,8 % | **26,1 %** |
 
-Los detalles, con sus pruebas de diagnóstico y limitaciones, están en
+La lectura no es que el canal real no exista, sino que **es débil frente al
+financiero incluso en la variable donde debería mandar**: sobre las exportaciones,
+el canal real explica 6,2 % a dos años. La transmisión de EE.UU. a Costa Rica en
+este período pasa mucho más por la tasa de la Fed que por el ciclo industrial
+estadounidense.
+
+Los detalles, con las pruebas de diagnóstico y las limitaciones, están en
 [`salidas/reporte.md`](salidas/reporte.md).
 
 ## Correr
 
 ```bash
 pip install -r requirements.txt
-python main.py                      # los dos bloques
-python main.py --bloque financiero  # solo uno
+python main.py                          # los tres bloques
+python main.py --bloque financiero      # solo uno
 ```
+
+Una corrida completa desde cero reproduce el reporte carácter por carácter salvo la
+fecha de generación.
 
 | Ruta | Qué es |
 |---|---|
 | `salidas/reporte.md` | resultados narrados, con las tablas de cada prueba |
-| `salidas/figuras/*.png` | 19 figuras a 300 dpi |
+| `salidas/figuras/*.png` | 26 figuras a 300 dpi |
 | `salidas/tablas/*.csv` | cada prueba estadística en su propio CSV |
 | `data/procesado/` | el panel armado y el registro de origen de cada serie |
 
@@ -53,8 +64,9 @@ correr sin red.
 | Bono del Tesoro a 2 años | `DGS2` |
 | Índice amplio del dólar | `DTWEXBGS` |
 
-**Costa Rica — BCCR**, descargados a mano del portal de indicadores económicos
-(https://sdd.bccr.fi.cr/es/IndicadoresEconomicos/Inicio/) y puestos en `data/raw/`:
+**Costa Rica — BCCR**, descargados a mano del portal público de indicadores
+económicos (https://sdd.bccr.fi.cr/es/IndicadoresEconomicos/Inicio/) y puestos en
+`data/raw/`. Son cuadros abiertos, sin login ni credenciales:
 
 | Archivo | Cuadro del BCCR | Tratamiento |
 |---|---|---|
@@ -62,25 +74,37 @@ correr sin red.
 | `balance_comercial.xlsx` | Contenedor/452?Cuadro=112 | **desacumulado**: el BCCR lo publica acumulado en el año |
 | `reservas.xlsx` | Contenedor/516?Cuadro=70 | saldo de fin de mes |
 | `tpm.xlsx` | Contenedor/358?Cuadro=223 | diario → promedio mensual |
+| `itcer.xlsx` | buscar «tipo de cambio efectivo real» en el portal | índice, base ene-1997 = 100 |
+| `exportaciones.xlsx` | buscar «exportaciones FOB acumuladas» en el portal | **desacumulado**, régimen definitivo |
+| `balanza_pagos.xlsx` | buscar «balanza de pagos trimestral MBP6» en el portal | trimestral, cuenta financiera |
 
 `src/bccr_excel.py` lee el formato exacto que exporta ese portal (encabezado en la
 fila 5) y resuelve la desacumulación. La verificación está en el código: la suma de
 los flujos mensuales de un año reproduce el acumulado de diciembre con diferencia 0.
 
-Para actualizar, se vuelven a bajar los cuatro Excel y se corre `main.py`. El portal
-carga los cuadros por JavaScript y tiene protección antibot, así que no hay forma
+Para actualizar, se vuelven a bajar los Excel y se corre `main.py`. El portal carga
+los cuadros por JavaScript y tiene protección antibot, así que no hay forma
 razonable de automatizar la descarga sin el token del servicio web del BCCR.
 
-## Los dos bloques y por qué
+## Los tres bloques y por qué
 
 Cuatro variables con 132 observaciones mensuales es una relación sana entre
-parámetros y datos. Meter las seis en un solo VAR no lo sería. Los dos bloques
-comparten las variables de EE.UU. y cambian las de Costa Rica:
+parámetros y datos. Meter las siete en un solo VAR no lo sería. Los bloques
+comparten las variables de EE.UU. y cambian las de Costa Rica, de modo que la
+descomposición de varianza de cada uno contesta la misma pregunta sobre una parte
+distinta del sector externo:
 
-- **Bloque comercial** — `ipi_eeuu`, `ffr`, `balcom`, `tc_venta`
-  Cómo llegan los dos canales al balance comercial y al tipo de cambio.
-- **Bloque financiero** — `ipi_eeuu`, `ffr`, `reservas`, `tpm`
+- **Bloque comercial** — `ipi_eeuu`, `ffr`, `export_cr`, `itcer` (132 obs, 3 rezagos)
+  El canal real y el financiero sobre las exportaciones y sobre la competitividad.
+- **Bloque financiero** — `ipi_eeuu`, `ffr`, `reservas`, `tpm` (132 obs, 3 rezagos)
   La transmisión hacia las reservas y la respuesta de política del BCCR.
+- **Bloque balanza de pagos** — `pib_eeuu`, `ffr`, `cuenta_fin` (44 obs, 2 rezagos)
+  Los flujos de capital medidos directamente. Trimestral y deliberadamente
+  parsimonioso: con ~44 observaciones, tres variables es el techo defendible.
+
+`tc_venta` y `balcom` se construyen y quedan en el panel, pero **no entran en
+ningún bloque**: el ITCER es mejor medida de competitividad que el tipo de cambio
+nominal, y las exportaciones son más informativas que el saldo comercial neto.
 
 ## Decisiones metodológicas que hay que poder defender
 
@@ -88,32 +112,36 @@ comparten las variables de EE.UU. y cambian las de Costa Rica:
   economía pequeña y abierta: no se le supone efecto contemporáneo sobre EE.UU. Es
   razonable, pero es un supuesto. Conviene reportar la robustez invirtiendo el orden
   de las dos variables ticas.
-- **Dummy exógena para el COVID** (marzo–agosto 2020). Sin ese control, 2020 domina
-  la estimación y las respuestas al impulso se vuelven irreconocibles.
+- **Dummy exógena para el COVID** (marzo–agosto 2020, y 2020T1–2020T2 en el bloque
+  trimestral). Sin ese control, 2020 domina la estimación y las respuestas al
+  impulso se vuelven irreconocibles.
 - **Rezagos por HQIC.** AIC sobreparametriza con muestras cortas y BIC se queda
   corto. El CSV `06_seleccion_rezagos_*` trae los tres criterios.
 - **ADF y KPSS juntos.** Tienen hipótesis nulas opuestas. Cuando se contradicen, la
   fila queda marcada como `ambiguo` en vez de forzar una conclusión.
 - **Producción industrial como medida mensual del ciclo real.** El PIB solo existe
-  trimestral y 44 trimestres no alcanzan para un VAR. Es una decisión de frecuencia,
-  no una equivalencia.
+  trimestral y 44 trimestres no alcanzan para un VAR mensual. Es una decisión de
+  frecuencia, no una equivalencia. El bloque trimestral sí usa el PIB.
 
 ## Limitaciones
 
-- **El balance comercial no es lo mismo que las exportaciones.** Un choque externo
-  puede mover importaciones y exportaciones a la vez, y el saldo neto esconde parte
-  de ese movimiento. Bajar la serie de exportaciones por separado es la mejora más
-  directa.
-- **Falta el ITCER** (tipo de cambio efectivo real multilateral), que es la medida
-  correcta de competitividad. Aquí se usó el tipo de cambio nominal de venta.
-- **Los residuos no son normales y hay autocorrelación remanente** en los dos
-  bloques. Está reportado en `08_diagnosticos_*.csv`. Es habitual en series
-  macroeconómicas con el choque de 2020 adentro, pero obliga a leer los intervalos
-  de confianza con cautela.
+- **Hay autocorrelación remanente en los tres bloques.** El Portmanteau rechaza la
+  nula en comercial (p = 0,0004), financiero (p = 0,0063) y balanza de pagos
+  (p = 0,0252). Está en `08_diagnosticos_*.csv`. Obliga a leer los intervalos de
+  confianza de las respuestas al impulso con cautela.
+- **Los residuos no son normales en los dos bloques mensuales** (Jarque-Bera
+  rechaza con p = 0). En el bloque trimestral no se rechaza (p = 0,377). Es habitual
+  en series macro con el choque de 2020 adentro.
 - **Las reservas suben tras un alza de la Fed**, que es lo contrario de la historia
   clásica de fuga de capitales. Casi seguro refleja el episodio 2022–2024, cuando
   Costa Rica acumuló reservas de forma agresiva mientras la Fed subía. Es una
   correlación de ese período, no una ley general, y así hay que presentarla.
+- **El bloque trimestral tiene 44 observaciones.** Con 3 variables y 2 rezagos está
+  en el límite de lo estimable. Sus resultados son indicativos, no concluyentes, y
+  por eso se reportan a 6 y 12 trimestres y no más lejos.
+- **La descomposición de varianza depende del orden de Cholesky.** Los porcentajes
+  del cuadro de resultados cambiarían con otro ordenamiento de las variables ticas.
+  La robustez a ese cambio está pendiente.
 
 ## Estructura
 
@@ -122,7 +150,7 @@ config.py              periodo, series, bloques de modelación, paleta
 main.py                orquestador
 src/fuentes.py         descarga y caché de FRED
 src/bccr_excel.py      lector de los Excel del BCCR y desacumulación
-src/dataset.py         armado del panel mensual
+src/dataset.py         armado del panel mensual y trimestral
 src/graficos.py        estilo único de todas las figuras
 src/descriptivo.py     estadísticas y figuras descriptivas
 src/estacionariedad.py ADF y KPSS
