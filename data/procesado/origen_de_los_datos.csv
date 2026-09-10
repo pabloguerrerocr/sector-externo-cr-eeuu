@@ -1,0 +1,13 @@
+variable,etiqueta,frecuencia,origen,titulo_original
+pib_eeuu,PIB real EE.UU. (mm USD encadenados),Q,FRED - GDPC1,
+ffr,Tasa de fondos federales (%),M,FRED - FEDFUNDS,
+ipi_eeuu,Produccion industrial EE.UU. (indice),M,FRED - INDPRO,
+t2y,Bono del Tesoro EE.UU. 2 anos (%),D,FRED - DGS2,
+dolar,Indice amplio del dolar (nominal),D,FRED - DTWEXBGS,
+tc_venta,Tipo de cambio de venta (colones por USD),M,BCCR - tipo_cambio.xlsx,Tipo cambio de compra y de venta del dólar de los Estados Unidos de América
+balcom,Balance comercial mensual (millones USD),M,BCCR - balance_comercial.xlsx,Balance comercial acumulado
+reservas,Reservas internacionales netas (millones USD),M,BCCR - reservas.xlsx,Reservas netas del Banco Central
+tpm,Tasa de politica monetaria del BCCR (%),M,BCCR - tpm.xlsx,Tasa de política monetaria
+itcer,"ITCER multilateral (indice, base ene-1997 = 100)",M,BCCR - itcer.xlsx,Índice de tipo de cambio efectivo real multilateral con ponderadores móviles
+export_cr,Exportaciones FOB mensuales (millones USD),M,BCCR - exportaciones.xlsx,Exportaciones FOB acumuladas
+cuenta_fin,Cuenta financiera de la balanza de pagos (millones USD),Q,BCCR - balanza_pagos.xlsx,Balanza de pagos trimestral (MBP6)

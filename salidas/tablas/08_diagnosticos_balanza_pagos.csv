@@ -1,0 +1,4 @@
+prueba,H0,estadistico,p_valor,conclusion
+Portmanteau (autocorrelacion),sin autocorrelacion,97.29687157918276,0.02522505881655498,se rechaza
+Jarque-Bera multivariada,residuos normales,6.4302201719306,0.376759169376113,no se rechaza
+Estabilidad (raices del polinomio),todas las raices fuera del circulo unitario,1.005683731925824,,estable

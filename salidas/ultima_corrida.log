@@ -1,0 +1,158 @@
+
+1. Datos
+--------
+  variable                        origen
+  pib_eeuu                  FRED - GDPC1
+       ffr               FRED - FEDFUNDS
+  ipi_eeuu                 FRED - INDPRO
+       t2y                   FRED - DGS2
+     dolar               FRED - DTWEXBGS
+  tc_venta       BCCR - tipo_cambio.xlsx
+    balcom BCCR - balance_comercial.xlsx
+  reservas          BCCR - reservas.xlsx
+       tpm               BCCR - tpm.xlsx
+     itcer             BCCR - itcer.xlsx
+ export_cr     BCCR - exportaciones.xlsx
+cuenta_fin     BCCR - balanza_pagos.xlsx
+
+Panel mensual:    132 observaciones, 2015-01-01 a 2025-12-01
+Panel trimestral: 44 observaciones, 2015-01-01 a 2025-10-01
+
+2. Descripcion
+--------------
+8 figuras descriptivas
+
+Bloque comercial: ['log_ipi_eeuu', 'ffr', 'log_export_cr', 'log_itcer']  (n = 132)
+----------------------------------------------------------------------------------
+canal real y canal financiero sobre las exportaciones y la competitividad medida por el ITCER
+
+     variable transformacion        adf_p   kpss_p      conclusion
+ log_ipi_eeuu          nivel 6.927256e-02 0.100000         ambiguo
+ log_ipi_eeuu  1a diferencia 2.978946e-17 0.100000    estacionaria
+          ffr          nivel 1.920599e-01 0.011936 no estacionaria
+          ffr  1a diferencia 3.802725e-02 0.100000    estacionaria
+log_export_cr          nivel 9.025973e-01 0.010000 no estacionaria
+log_export_cr  1a diferencia 1.555057e-04 0.100000    estacionaria
+    log_itcer          nivel 8.198945e-01 0.010000 no estacionaria
+    log_itcer  1a diferencia 1.961251e-10 0.100000    estacionaria
+
+Rezagos elegidos por HQIC: 3
+Rango de cointegracion (Johansen, traza, 5%): r = 0
+
+Diagnosticos
+                            prueba                                          H0  estadistico      p_valor conclusion
+     Portmanteau (autocorrelacion)                         sin autocorrelacion   189.258311 3.535270e-04 se rechaza
+          Jarque-Bera multivariada                           residuos normales   462.702842 7.009119e-95 se rechaza
+Estabilidad (raices del polinomio) todas las raices fuera del circulo unitario     1.019378          NaN    estable
+
+Causalidad de Granger: 5 de 12 pares significativos al 5%
+       causa        efecto  estadistico_F      p_valor causa_en_sentido_granger
+         ffr  log_ipi_eeuu      11.645610 2.281047e-07                       si
+log_ipi_eeuu           ffr       5.355029 1.241519e-03                       si
+   log_itcer log_export_cr       3.761658 1.088712e-02                       si
+         ffr     log_itcer       3.039619 2.877108e-02                       si
+         ffr log_export_cr       2.989802 3.075189e-02                       si
+
+Canal real frente a canal financiero (% de la varianza explicada)
+     variable  horizonte  canal_real_pc  canal_financiero_pc  razon_real_sobre_financiero canal_dominante
+log_export_cr          6           1.80                 2.98                         0.60      financiero
+log_export_cr         12           4.05                 6.01                         0.67      financiero
+log_export_cr         24           6.25                10.43                         0.60      financiero
+    log_itcer          6           1.68                 5.35                         0.31      financiero
+    log_itcer         12           2.54                22.76                         0.11      financiero
+    log_itcer         24           4.49                43.22                         0.10      financiero
+
+En 6 de 6 combinaciones de variable y horizonte domina el canal financiero. A 24 meses, sobre ITCER, el canal real explica 4.5 por ciento y el financiero 43.2 por ciento de la varianza.
+
+Bloque financiero: ['log_ipi_eeuu', 'ffr', 'log_reservas', 'tpm']  (n = 132)
+----------------------------------------------------------------------------
+transmision hacia las reservas y la respuesta de politica monetaria del BCCR
+
+    variable transformacion        adf_p   kpss_p      conclusion
+log_ipi_eeuu          nivel 6.927256e-02 0.100000         ambiguo
+log_ipi_eeuu  1a diferencia 2.978946e-17 0.100000    estacionaria
+         ffr          nivel 1.920599e-01 0.011936 no estacionaria
+         ffr  1a diferencia 3.802725e-02 0.100000    estacionaria
+log_reservas          nivel 9.451782e-01 0.010000 no estacionaria
+log_reservas  1a diferencia 4.101351e-15 0.100000    estacionaria
+         tpm          nivel 5.238502e-02 0.100000         ambiguo
+         tpm  1a diferencia 8.204134e-03 0.100000    estacionaria
+
+Rezagos elegidos por HQIC: 3
+Rango de cointegracion (Johansen, traza, 5%): r = 1
+
+VECM: vector de largo plazo y velocidad de ajuste
+              vector_1  ajuste_1  t_ajuste_1  p_ajuste_1
+log_ipi_eeuu    1.0000   -0.3006     -5.5898      0.0000
+ffr             0.0119   -3.2378     -6.2344      0.0000
+log_reservas   -0.0255   -0.3562     -1.6871      0.0916
+tpm            -0.0163    1.7026      1.5209      0.1283
+
+Diagnosticos
+                            prueba                                          H0  estadistico       p_valor conclusion
+     Portmanteau (autocorrelacion)                         sin autocorrelacion   171.385124  6.297493e-03 se rechaza
+          Jarque-Bera multivariada                           residuos normales   494.828714 9.051282e-102 se rechaza
+Estabilidad (raices del polinomio) todas las raices fuera del circulo unitario     1.027094           NaN    estable
+
+Causalidad de Granger: 4 de 12 pares significativos al 5%
+       causa       efecto  estadistico_F      p_valor causa_en_sentido_granger
+         ffr log_ipi_eeuu      12.851115 4.463118e-08                       si
+         tpm          ffr       9.680969 3.307982e-06                       si
+log_ipi_eeuu          ffr       8.755997 1.171686e-05                       si
+         ffr log_reservas       3.087539 2.698443e-02                       si
+
+Canal real frente a canal financiero (% de la varianza explicada)
+    variable  horizonte  canal_real_pc  canal_financiero_pc  razon_real_sobre_financiero canal_dominante
+log_reservas          6           1.46                 2.85                         0.51      financiero
+log_reservas         12           2.24                17.07                         0.13      financiero
+log_reservas         24           3.27                44.44                         0.07      financiero
+         tpm          6           0.51                38.40                         0.01      financiero
+         tpm         12           0.26                43.64                         0.01      financiero
+         tpm         24           0.58                43.87                         0.01      financiero
+
+En 6 de 6 combinaciones de variable y horizonte domina el canal financiero. A 24 meses, sobre tasa de politica del BCCR, el canal real explica 0.6 por ciento y el financiero 43.9 por ciento de la varianza.
+
+Bloque balanza_pagos: ['log_pib_eeuu', 'ffr', 'cuenta_fin']  (n = 44)
+---------------------------------------------------------------------
+flujos de capital medidos por la cuenta financiera de la balanza de pagos; trimestral, deliberadamente parsimonioso porque solo hay ~44 observaciones
+
+    variable transformacion        adf_p   kpss_p   conclusion
+log_pib_eeuu          nivel 7.966056e-03 0.099288 estacionaria
+log_pib_eeuu  1a diferencia 1.404970e-13 0.100000 estacionaria
+         ffr          nivel 2.068142e-01 0.100000      ambiguo
+         ffr  1a diferencia 1.199870e-01 0.100000      ambiguo
+  cuenta_fin          nivel 3.078461e-09 0.077341 estacionaria
+  cuenta_fin  1a diferencia 4.277131e-02 0.100000 estacionaria
+
+Rezagos elegidos por HQIC: 2
+Rango de cointegracion (Johansen, traza, 5%): r = 1
+
+VECM: vector de largo plazo y velocidad de ajuste
+              vector_1  ajuste_1  t_ajuste_1  p_ajuste_1
+log_pib_eeuu    1.0000    0.0060      2.7479      0.0060
+ffr             0.1220    0.0764      1.7529      0.0796
+cuenta_fin      0.0019 -457.9653     -4.7167      0.0000
+
+Diagnosticos
+                            prueba                                          H0  estadistico  p_valor    conclusion
+     Portmanteau (autocorrelacion)                         sin autocorrelacion    97.296872 0.025225    se rechaza
+          Jarque-Bera multivariada                           residuos normales     6.430220 0.376759 no se rechaza
+Estabilidad (raices del polinomio) todas las raices fuera del circulo unitario     1.005684      NaN       estable
+
+Causalidad de Granger: 2 de 6 pares significativos al 5%
+       causa     efecto  estadistico_F  p_valor causa_en_sentido_granger
+         ffr cuenta_fin       8.386214 0.000425                       si
+log_pib_eeuu        ffr       5.510313 0.005340                       si
+
+Canal real frente a canal financiero (% de la varianza explicada)
+  variable  horizonte  canal_real_pc  canal_financiero_pc  razon_real_sobre_financiero canal_dominante
+cuenta_fin          6           2.57                21.34                         0.12      financiero
+cuenta_fin         12           2.79                26.06                         0.11      financiero
+
+En 2 de 2 combinaciones de variable y horizonte domina el canal financiero. A 12 trimestres, sobre cuenta financiera, el canal real explica 2.8 por ciento y el financiero 26.1 por ciento de la varianza.
+
+3. Reporte
+----------
+Reporte: C:\Users\guerr\Proyectos\tfg-sector-externo\salidas\reporte.md
+Figuras: 26 en C:\Users\guerr\Proyectos\tfg-sector-externo\salidas\figuras
+Tablas:  31 en C:\Users\guerr\Proyectos\tfg-sector-externo\salidas\tablas
