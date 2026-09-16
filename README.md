@@ -9,6 +9,12 @@ El pipeline corre de punta a punta: lee los datos, prueba raíces unitarias, pru
 cointegración, estima tres bloques VAR/VECM, y produce 26 figuras a 300 dpi, 31
 tablas y un reporte en markdown.
 
+> **Autoría.** Este repositorio es trabajo propio de José Pablo Guerrero Chaves y
+> corresponde a su Trabajo Final de Graduación (Licenciatura en Economía,
+> Universidad Latina de Costa Rica), con anteproyecto aprobado. Los datos son
+> públicos: FRED y el portal de indicadores del BCCR. El historial de commits
+> documenta la autoría y las fechas.
+
 ## Resultado principal
 
 **El canal financiero domina al canal real en las 14 combinaciones de variable y
