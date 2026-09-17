@@ -29,6 +29,8 @@ predicción atribuido a cada canal:
 | Exportaciones FOB | comercial | 24 meses | 6,2 % | 10,4 % |
 | Cuenta financiera de la balanza de pagos | balanza de pagos | 12 trimestres | 2,8 % | **26,1 %** |
 
+![Canal real frente a canal financiero](salidas/figuras/13_canal_real_vs_financiero_financiero.png)
+
 La lectura no es que el canal real no exista, sino que **es débil frente al
 financiero incluso en la variable donde debería mandar**: sobre las exportaciones,
 el canal real explica 6,2 % a dos años. La transmisión de EE.UU. a Costa Rica en
@@ -37,6 +39,13 @@ estadounidense.
 
 Los detalles, con las pruebas de diagnóstico y las limitaciones, están en
 [`salidas/reporte.md`](salidas/reporte.md).
+
+### Cómo responde Costa Rica a un alza de la Fed
+
+![Respuesta al impulso](salidas/figuras/11_impulso_respuesta_financiero.png)
+
+Las bandas son intervalos bootstrap. Donde la banda cruza el cero, el efecto no
+es distinguible de cero: eso también es un resultado y se reporta.
 
 ## Correr
 
@@ -148,6 +157,18 @@ nominal, y las exportaciones son más informativas que el saldo comercial neto.
 - **La descomposición de varianza depende del orden de Cholesky.** Los porcentajes
   del cuadro de resultados cambiarían con otro ordenamiento de las variables ticas.
   La robustez a ese cambio está pendiente.
+
+## Las 26 figuras
+
+El pipeline produce 26 figuras a 300 dpi en `salidas/figuras/`. Las más útiles
+para entender el trabajo sin clonarlo:
+
+| Figura | Qué muestra |
+|---|---|
+| [`06_correlaciones.png`](salidas/figuras/06_correlaciones.png) | matriz de correlación entre las 12 series |
+| [`08_niveles_vs_diferencias_comercial.png`](salidas/figuras/08_niveles_vs_diferencias_comercial.png) | por qué hay que diferenciar antes de estimar |
+| [`10_johansen_financiero.png`](salidas/figuras/10_johansen_financiero.png) | la traza de Johansen contra su valor crítico |
+| [`12_descomposicion_varianza_financiero.png`](salidas/figuras/12_descomposicion_varianza_financiero.png) | la descomposición completa, no solo los dos canales |
 
 ## Estructura
 
