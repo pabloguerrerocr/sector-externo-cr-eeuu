@@ -13,3 +13,6 @@ data/raw/cache/
 
 # Entorno
 .env
+
+# Instrucciones locales del asistente (no van al repo)
+CLAUDE.md

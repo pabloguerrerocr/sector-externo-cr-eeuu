@@ -138,9 +138,10 @@ def escribir(contexto: dict) -> str:
       "publica el saldo acumulado; aqui se desacumulo para obtener el flujo mensual. "
       "Un choque externo puede mover importaciones y exportaciones a la vez, y el "
       "saldo neto esconde parte de ese movimiento.")
-    A("- **No se incluyo el ITCER** (tipo de cambio efectivo real multilateral), que "
-      "seria la medida correcta de competitividad. Se uso el tipo de cambio nominal "
-      "de venta. Incorporar el ITCER es la mejora mas evidente del trabajo.")
+    A("- **El ITCER es multilateral.** Mide la competitividad frente a una canasta de "
+      "socios, no solo frente a EE.UU., asi que mezcla el efecto del dolar con el de "
+      "las demas monedas. Un tipo de cambio real bilateral con EE.UU. aislaria mejor "
+      "el canal estadounidense.")
     A("- **Identificacion de Cholesky con EE.UU. ordenado primero.** Supone que Costa "
       "Rica no afecta contemporaneamente a Estados Unidos. Es razonable para una "
       "economia de este tamano, pero sigue siendo un supuesto: conviene reportar la "

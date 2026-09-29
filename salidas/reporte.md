@@ -343,6 +343,6 @@ En 2 de 2 combinaciones de variable y horizonte domina el **canal financiero**. 
 
 - **La produccion industrial de EE.UU. es una aproximacion mensual del ciclo real.** El PIB solo existe trimestral y 44 trimestres no alcanzan para un VAR. Es una decision de frecuencia, no una equivalencia.
 - **El balance comercial no es lo mismo que las exportaciones.** El BCCR publica el saldo acumulado; aqui se desacumulo para obtener el flujo mensual. Un choque externo puede mover importaciones y exportaciones a la vez, y el saldo neto esconde parte de ese movimiento.
-- **No se incluyo el ITCER** (tipo de cambio efectivo real multilateral), que seria la medida correcta de competitividad. Se uso el tipo de cambio nominal de venta. Incorporar el ITCER es la mejora mas evidente del trabajo.
+- **El ITCER es multilateral.** Mide la competitividad frente a una canasta de socios, no solo frente a EE.UU., asi que mezcla el efecto del dolar con el de las demas monedas. Un tipo de cambio real bilateral con EE.UU. aislaria mejor el canal estadounidense.
 - **Identificacion de Cholesky con EE.UU. ordenado primero.** Supone que Costa Rica no afecta contemporaneamente a Estados Unidos. Es razonable para una economia de este tamano, pero sigue siendo un supuesto: conviene reportar la robustez invirtiendo el orden de las variables ticas.
 - **2020 se controla con una dummy exogena.** Sin ese control el choque COVID domina la estimacion y las respuestas al impulso se vuelven irreconocibles.
