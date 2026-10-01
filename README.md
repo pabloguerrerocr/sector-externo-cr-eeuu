@@ -1,5 +1,7 @@
 # Efecto del ciclo económico y la política monetaria de EE.UU. sobre el sector externo de Costa Rica, 2015–2025
 
+**[Explorar el tablero interactivo →](https://pabloguerrerocr.github.io/tfg/)** · [Resumen de 2 páginas en PDF](https://pabloguerrerocr.github.io/tfg/resumen.pdf)
+
 Investigación con **datos reales y públicos** sobre cómo se transmiten a Costa Rica
 los dos canales por los que Estados Unidos afecta a una economía pequeña y abierta:
 el **canal real** (su ciclo económico mueve la demanda de exportaciones) y el
