@@ -154,9 +154,25 @@ nominal, y las exportaciones son más informativas que el saldo comercial neto.
 - **El bloque trimestral tiene 44 observaciones.** Con 3 variables y 2 rezagos está
   en el límite de lo estimable. Sus resultados son indicativos, no concluyentes, y
   por eso se reportan a 6 y 12 trimestres y no más lejos.
-- **La descomposición de varianza depende del orden de Cholesky.** Los porcentajes
-  del cuadro de resultados cambiarían con otro ordenamiento de las variables ticas.
-  La robustez a ese cambio está pendiente.
+- **La descomposición de varianza depende del orden de Cholesky,** y la conclusión
+  resiste el cambio. `robustez_cholesky.py` lo prueba sin descargar nada (resultados
+  en `salidas/robustez_cholesky.md`):
+
+  | Especificación | Domina el canal financiero |
+  |---|---:|
+  | Base (EE.UU. primero, ciclo real antes que la Fed) | 14 de 14 |
+  | Variables ticas invertidas | 12 de 12 |
+  | Variables de EE.UU. invertidas (la Fed primero) | 11 de 14 |
+  | Generalizada de Pesaran y Shin (no depende del orden) | **14 de 14** |
+
+  Invertir las variables ticas **no mueve ningún porcentaje**: con Cholesky, la
+  parte que explican los choques de EE.UU. no depende del orden de las variables
+  que van después. La prueba que importa es invertir las de EE.UU. Ahí solo cambian
+  las **exportaciones**, que ya eran casi un empate (8,9 % real contra 7,7 %
+  financiero a 24 meses): sobre esa variable el resultado no es concluyente. Sobre
+  reservas, tasa del BCCR, ITCER y cuenta financiera, el canal financiero domina en
+  todas las especificaciones; con la descomposición generalizada explica entre
+  23,6 % y 38,9 %, y el real no pasa de 4,6 %.
 
 ## Las 26 figuras
 

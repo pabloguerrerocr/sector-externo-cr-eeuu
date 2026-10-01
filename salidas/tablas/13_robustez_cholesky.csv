@@ -1,0 +1,67 @@
+bloque,especificacion,variable,horizonte,canal_real_pc,canal_financiero_pc,canal_dominante
+comercial,base (main.py),log_export_cr,6,1.7980210614972796,2.9762840136889785,financiero
+comercial,base (main.py),log_itcer,6,1.6832797689137098,5.345612500170814,financiero
+comercial,base (main.py),log_export_cr,12,4.046038892956342,6.010518355638487,financiero
+comercial,base (main.py),log_itcer,12,2.543333036664741,22.755617868587837,financiero
+comercial,base (main.py),log_export_cr,24,6.249139600150034,10.42933033211235,financiero
+comercial,base (main.py),log_itcer,24,4.494054113437251,43.220785042252444,financiero
+comercial,EE.UU. invertido (Fed primero),log_export_cr,6,2.434456122041643,2.339848953144527,real
+comercial,EE.UU. invertido (Fed primero),log_itcer,6,2.2419924814059864,4.786899787678773,financiero
+comercial,EE.UU. invertido (Fed primero),log_export_cr,12,5.612372343637839,4.444184904956428,real
+comercial,EE.UU. invertido (Fed primero),log_itcer,12,5.235123187474945,20.063827717776476,financiero
+comercial,EE.UU. invertido (Fed primero),log_export_cr,24,8.935453609279357,7.743016322980274,real
+comercial,EE.UU. invertido (Fed primero),log_itcer,24,9.888168449297504,37.8266707063874,financiero
+comercial,Costa Rica invertido,log_export_cr,6,1.7980210614973888,2.976284013688836,financiero
+comercial,Costa Rica invertido,log_itcer,6,1.6832797689138614,5.345612500170811,financiero
+comercial,Costa Rica invertido,log_export_cr,12,4.046038892956673,6.0105183556375845,financiero
+comercial,Costa Rica invertido,log_itcer,12,2.5433330366647926,22.755617868586793,financiero
+comercial,Costa Rica invertido,log_export_cr,24,6.249139600150247,10.429330332109139,financiero
+comercial,Costa Rica invertido,log_itcer,24,4.494054113436783,43.220785042247996,financiero
+comercial,ambos invertidos,log_export_cr,6,2.434456122041451,2.339848953144489,real
+comercial,ambos invertidos,log_itcer,6,2.241992481405863,4.786899787679044,financiero
+comercial,ambos invertidos,log_export_cr,12,5.612372343637299,4.444184904956472,real
+comercial,ambos invertidos,log_itcer,12,5.235123187474863,20.063827717777592,financiero
+comercial,ambos invertidos,log_export_cr,24,8.935453609278794,7.743016322980923,real
+comercial,ambos invertidos,log_itcer,24,9.888168449297549,37.82667070638972,financiero
+comercial,generalizada (sin orden),log_export_cr,6,1.8930764454817366,2.4635489728327444,financiero
+comercial,generalizada (sin orden),log_itcer,6,1.6865537676514764,4.796210363467939,financiero
+comercial,generalizada (sin orden),log_export_cr,12,4.507630263102893,4.951198666746531,financiero
+comercial,generalizada (sin orden),log_itcer,12,2.5905027481859335,20.43593980526881,financiero
+comercial,generalizada (sin orden),log_export_cr,24,7.310261753197592,9.057803106035054,financiero
+comercial,generalizada (sin orden),log_itcer,24,4.622963701653415,38.91170894163837,financiero
+financiero,base (main.py),log_reservas,6,1.4576956803742163,2.8546503828742296,financiero
+financiero,base (main.py),tpm,6,0.5107781396943284,38.40382615238364,financiero
+financiero,base (main.py),log_reservas,12,2.237181805628694,17.06833936874029,financiero
+financiero,base (main.py),tpm,12,0.25816662937991475,43.64246004347731,financiero
+financiero,base (main.py),log_reservas,24,3.27028987044898,44.436213769078805,financiero
+financiero,base (main.py),tpm,24,0.5833883147148574,43.865363478319104,financiero
+financiero,EE.UU. invertido (Fed primero),log_reservas,6,1.5966840204573451,2.715662042790987,financiero
+financiero,EE.UU. invertido (Fed primero),tpm,6,0.0355239455370431,38.87908034654126,financiero
+financiero,EE.UU. invertido (Fed primero),log_reservas,12,3.3408536709930505,15.964667503375967,financiero
+financiero,EE.UU. invertido (Fed primero),tpm,12,0.2565612964772105,43.64406537638049,financiero
+financiero,EE.UU. invertido (Fed primero),log_reservas,24,5.842129360728119,41.86437427880024,financiero
+financiero,EE.UU. invertido (Fed primero),tpm,24,0.9962604551638587,43.45249133787055,financiero
+financiero,Costa Rica invertido,log_reservas,6,1.4576956803740913,2.854650382874279,financiero
+financiero,Costa Rica invertido,tpm,6,0.5107781396943679,38.40382615238377,financiero
+financiero,Costa Rica invertido,log_reservas,12,2.237181805628494,17.06833936874052,financiero
+financiero,Costa Rica invertido,tpm,12,0.25816662937993623,43.64246004347752,financiero
+financiero,Costa Rica invertido,log_reservas,24,3.2702898704488383,44.43621376907933,financiero
+financiero,Costa Rica invertido,tpm,24,0.5833883147149359,43.86536347831926,financiero
+financiero,ambos invertidos,log_reservas,6,1.5966840204571424,2.7156620427910005,financiero
+financiero,ambos invertidos,tpm,6,0.03552394553702053,38.87908034654097,financiero
+financiero,ambos invertidos,log_reservas,12,3.3408536709928724,15.964667503375797,financiero
+financiero,ambos invertidos,tpm,12,0.2565612964772609,43.64406537638023,financiero
+financiero,ambos invertidos,log_reservas,24,5.84212936072818,41.864374278799495,financiero
+financiero,ambos invertidos,tpm,24,0.9962604551639862,43.4524913378706,financiero
+financiero,generalizada (sin orden),log_reservas,6,1.4399308906864734,2.682566544393948,financiero
+financiero,generalizada (sin orden),tpm,6,0.37665849734831636,28.670248085355116,financiero
+financiero,generalizada (sin orden),log_reservas,12,2.02626546864488,14.459555499288726,financiero
+financiero,generalizada (sin orden),tpm,12,0.18883587231746754,31.92343323621859,financiero
+financiero,generalizada (sin orden),log_reservas,24,2.595952815829837,33.231898271171474,financiero
+financiero,generalizada (sin orden),tpm,24,0.4360282340770507,32.476675631668,financiero
+balanza_pagos,base (main.py),cuenta_fin,6,2.5698847118643724,21.338215337969363,financiero
+balanza_pagos,base (main.py),cuenta_fin,12,2.792987464778747,26.063289661245413,financiero
+balanza_pagos,EE.UU. invertido (Fed primero),cuenta_fin,6,3.501242538850614,20.406857511033007,financiero
+balanza_pagos,EE.UU. invertido (Fed primero),cuenta_fin,12,5.422066182427106,23.434210943676263,financiero
+balanza_pagos,generalizada (sin orden),cuenta_fin,6,2.540834347854739,20.17617531880184,financiero
+balanza_pagos,generalizada (sin orden),cuenta_fin,12,2.812684746883928,23.59947851808939,financiero
