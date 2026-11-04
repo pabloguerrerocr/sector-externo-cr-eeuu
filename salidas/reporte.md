@@ -1,7 +1,7 @@
 # Efecto del ciclo economico y la politica monetaria de EE.UU.
 ## sobre el sector externo de Costa Rica, 2015-2025
 
-Generado el 2026-09-10 por `main.py`. Muestra: 2015-01-01 a 2025-12-01, 132 observaciones mensuales.
+Generado el 2026-11-04 por `main.py`. Muestra: 2015-01-01 a 2025-12-01, 132 observaciones mensuales.
 
 **Todos los datos son reales.** Estados Unidos viene de FRED (Reserva Federal de San Luis) y Costa Rica de los cuadros publicados por el Banco Central de Costa Rica en su portal de indicadores economicos.
 
@@ -164,7 +164,7 @@ Rango al 5 por ciento: **r = 1**. Hay relacion de largo plazo entre las variable
 | log_reservas |    -0.0255 |    -0.3562 |      -1.6871 |       0.0916 |
 | tpm          |    -0.0163 |     1.7026 |       1.5209 |       0.1283 |
 
-El coeficiente de ajuste dice que fraccion del desequilibrio se corrige cada mes. Negativo y significativo en la variable tica significa que Costa Rica es la que se ajusta, no Estados Unidos: exactamente lo que predice la teoria para una economia pequena y abierta.
+El coeficiente de ajuste dice que fraccion del desequilibrio se corrige cada mes. Son significativos al 5 por ciento los de `log_ipi_eeuu` (p = 0.000), `ffr` (p = 0.000). Ninguna variable tica se ajusta de forma significativa: el vector parece recoger una relacion entre las variables de EE.UU. y no un equilibrio que Costa Rica tenga que restablecer.
 
 ### Canal real frente a canal financiero
 
@@ -248,7 +248,7 @@ Rango al 5 por ciento: **r = 1**. Hay relacion de largo plazo entre las variable
 | ffr          |     0.122  |     0.0764 |       1.7529 |       0.0796 |
 | cuenta_fin   |     0.0019 |  -457.965  |      -4.7167 |       0      |
 
-El coeficiente de ajuste dice que fraccion del desequilibrio se corrige cada mes. Negativo y significativo en la variable tica significa que Costa Rica es la que se ajusta, no Estados Unidos: exactamente lo que predice la teoria para una economia pequena y abierta.
+El coeficiente de ajuste dice que fraccion del desequilibrio se corrige cada trimestre. Son significativos al 5 por ciento los de `log_pib_eeuu` (p = 0.006), `cuenta_fin` (p = 0.000). Se ajustan variables de los dos paises, asi que la correccion no recae solo en Costa Rica.
 
 ### Canal real frente a canal financiero
 
@@ -278,6 +278,7 @@ En 2 de 2 combinaciones de variable y horizonte domina el **canal financiero**. 
 
 ## Figuras
 
+- `salidas/figuras/00_resumen_canales.png`
 - `salidas/figuras/01_series_niveles.png`
 - `salidas/figuras/02_fed_vs_bccr.png`
 - `salidas/figuras/03_indexado_base100.png`
@@ -338,6 +339,9 @@ En 2 de 2 combinaciones de variable y horizonte domina el **canal financiero**. 
 - `salidas/tablas/12_canal_real_vs_financiero_balanza_pagos.csv`
 - `salidas/tablas/12_canal_real_vs_financiero_comercial.csv`
 - `salidas/tablas/12_canal_real_vs_financiero_financiero.csv`
+- `salidas/tablas/13_robustez_cholesky.csv`
+- `salidas/tablas/14_irf_bandas.csv`
+- `salidas/tablas/15_fevd_especificaciones.csv`
 
 ## Limitaciones que hay que declarar
 

@@ -16,6 +16,34 @@ def _md(df: pd.DataFrame, decimales: int = 4) -> str:
     return df.round(decimales).to_markdown(index=False)
 
 
+def _lectura_vecm(bloque: dict) -> str:
+    """
+    Lectura de la velocidad de ajuste a partir de los resultados, no de la teoria:
+    dice que variables corrigen el desequilibrio de forma significativa.
+    """
+    v = bloque["vecm"]
+    periodo = "mes" if bloque.get("frecuencia", "M") == "M" else "trimestre"
+    texto = (f"El coeficiente de ajuste dice que fraccion del desequilibrio se corrige "
+             f"cada {periodo}. ")
+    sig = v[v["p_ajuste_1"] < config.NIVEL_SIG]
+    if not len(sig):
+        return texto + ("Ningun coeficiente de ajuste es significativo al 5 por ciento: "
+                        "el VECM no identifica que variable corrige el desequilibrio.")
+    eeuu = [c for c in sig.index if "ipi" in c or "pib" in c or c == "ffr"]
+    tica = [c for c in sig.index if c not in eeuu]
+    lista = ", ".join(f"`{c}` (p = {sig.loc[c, 'p_ajuste_1']:.3f})" for c in sig.index)
+    texto += f"Son significativos al 5 por ciento los de {lista}. "
+    if tica and not eeuu:
+        return texto + ("Solo se ajusta Costa Rica, que es lo que predice la teoria para "
+                        "una economia pequena y abierta.")
+    if tica:
+        return texto + ("Se ajustan variables de los dos paises, asi que la correccion "
+                        "no recae solo en Costa Rica.")
+    return texto + ("Ninguna variable tica se ajusta de forma significativa: el vector "
+                    "parece recoger una relacion entre las variables de EE.UU. y no un "
+                    "equilibrio que Costa Rica tenga que restablecer.")
+
+
 def escribir(contexto: dict) -> str:
     hoy = dt.date.today().isoformat()
     panel = contexto["panel"]
@@ -92,10 +120,7 @@ def escribir(contexto: dict) -> str:
             A("")
             A(bloque["vecm"].round(4).to_markdown())
             A("")
-            A("El coeficiente de ajuste dice que fraccion del desequilibrio se corrige "
-              "cada mes. Negativo y significativo en la variable tica significa que "
-              "Costa Rica es la que se ajusta, no Estados Unidos: exactamente lo que "
-              "predice la teoria para una economia pequena y abierta.")
+            A(_lectura_vecm(bloque))
             A("")
 
         A("### Canal real frente a canal financiero")

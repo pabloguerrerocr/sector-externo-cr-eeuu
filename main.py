@@ -2,10 +2,12 @@
 """
 Corre el analisis completo con datos reales.
 
-    python main.py                          # los tres bloques
+    python main.py                          # los tres bloques, sin red
     python main.py --bloque balanza_pagos   # solo uno
+    python main.py --descargar-fred         # baja de nuevo las series de FRED
 
-Datos: FRED para Estados Unidos (cacheado), Excel del BCCR para Costa Rica.
+Datos: FRED para Estados Unidos (copia local o instantanea versionada en
+data/procesado/), Excel del BCCR para Costa Rica.
 Salidas: salidas/figuras/*.png, salidas/tablas/*.csv, salidas/reporte.md
 """
 from __future__ import annotations
@@ -18,7 +20,7 @@ import pandas as pd
 
 import config
 from src import (cointegracion as co, dataset, descriptivo, estacionariedad as est,
-                 modelo as mo, reporte)
+                 fuentes, modelo as mo, reporte)
 
 warnings.filterwarnings("ignore")
 
@@ -31,6 +33,15 @@ ETIQUETAS = {
     "log_reservas": "reservas internacionales",
     "tpm": "tasa de politica del BCCR",
     "cuenta_fin": "cuenta financiera",
+}
+
+# Nombres completos para la figura resumen (00_resumen_canales.png).
+NOMBRES_RESUMEN = {
+    "log_reservas": "Reservas internacionales netas",
+    "tpm": "Tasa de política monetaria del BCCR",
+    "log_itcer": "Tipo de cambio real (ITCER)",
+    "cuenta_fin": "Cuenta financiera (trimestral)",
+    "log_export_cr": "Exportaciones FOB",
 }
 
 
@@ -122,7 +133,8 @@ def correr_bloque(panel: pd.DataFrame, spec: dict) -> tuple[dict, list]:
     )
     print("\n" + lectura.replace("**", ""))
 
-    ctx = {"nombre": nombre, "descripcion": spec["descripcion"],
+    ctx = {"nombre": nombre, "frecuencia": spec["frecuencia"],
+           "descripcion": spec["descripcion"],
            "columnas": list(X.columns), "n_obs": len(X), "rezagos": p,
            "raices": raices, "johansen": tj, "rango": rango, "engle_granger": eg,
            "vecm": tabla_vecm, "granger": gr, "canales": canales,
@@ -135,14 +147,23 @@ def main():
     ap.add_argument("--bloque",
                     choices=["comercial", "financiero", "balanza_pagos", "todos"],
                     default="todos")
+    ap.add_argument("--descargar-fred", action="store_true",
+                    help="baja de nuevo las series de FRED en vez de usar la copia "
+                         "local o la instantanea versionada")
     args = ap.parse_args()
 
     _titulo("1. Datos")
     try:
-        mensual, trimestral = dataset.construir()
-    except FileNotFoundError as e:
+        mensual, trimestral = dataset.construir(descargar_fred=args.descargar_fred)
+    except (FileNotFoundError, fuentes.FREDNoDisponible) as e:
         print(f"\n{e}")
         sys.exit(1)
+    for aviso in dataset.AVISOS:
+        print(aviso + "\n")
+    if dataset.VERIFICACIONES:
+        print("Desacumulacion verificada (suma anual de los flujos = acumulado de "
+              "diciembre): " + ", ".join(f"{k} dif. max. {v:.1e}"
+                                         for k, v in dataset.VERIFICACIONES.items()) + "\n")
 
     origenes = pd.read_csv(config.DATA_PROC / "origen_de_los_datos.csv")
     print(origenes[["variable", "origen"]].to_string(index=False))
@@ -166,6 +187,11 @@ def main():
             figuras += figs
         except Exception as e:
             print(f"\nBloque {spec['nombre']} fallo: {type(e).__name__} - {e}")
+
+    if len(bloques) == len(config.BLOQUES):
+        # La figura resumen solo tiene sentido con los tres bloques.
+        figuras.insert(0, mo.fig_resumen_canales(
+            [(b["canales"], b["frecuencia"]) for b in bloques], NOMBRES_RESUMEN))
 
     _titulo("3. Reporte")
     ruta = reporte.escribir({"origenes": origenes, "bloques": bloques,

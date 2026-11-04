@@ -264,6 +264,72 @@ def fig_fevd(t_fevd: pd.DataFrame, objetivos: list[str], nombre_bloque: str,
     return g.guardar(fig, "12_descomposicion_varianza_" + nombre_bloque, demo)
 
 
+def fig_resumen_canales(tablas: list[tuple[pd.DataFrame, str]],
+                        nombres: dict[str, str]):
+    """
+    La figura que resume el trabajo: para cada variable de Costa Rica, cuanto de
+    su varianza explica cada canal de EE.UU. en el horizonte mas largo de su
+    bloque (24 meses; 12 trimestres en el bloque trimestral).
+
+    `tablas` es una lista de (tabla de comparar_canales, frecuencia del bloque).
+    """
+    filas = []
+    for t, frec in tablas:
+        for var, sub in t.groupby("variable", sort=False):
+            u = sub.loc[sub["horizonte"].idxmax()]
+            filas.append({"variable": nombres.get(var, var),
+                          "real": u["canal_real_pc"], "financiero": u["canal_financiero_pc"]})
+    # barh dibuja de abajo hacia arriba: orden ascendente deja el mayor arriba.
+    d = pd.DataFrame(filas).sort_values("financiero").reset_index(drop=True)
+
+    def pc(v: float) -> str:
+        return format(v, ".1f").replace(".", ",") + " %"
+
+    fig, ax = plt.subplots(figsize=(9.4, 4.9))
+    y = np.arange(len(d))
+    alto, hueco = 0.30, 0.04          # barra fina y 2 px de superficie entre las dos
+    desp = alto / 2 + hueco / 2
+    ax.barh(y + desp, d["financiero"], alto, color=g.color(1), linewidth=0,
+            label="canal financiero (tasa de la Fed)")
+    ax.barh(y - desp, d["real"], alto, color=g.color(0), linewidth=0,
+            label="canal real (ciclo de EE.UU.)")
+
+    arriba = len(d) - 1
+    for yi, (r, f) in enumerate(zip(d["real"], d["financiero"])):
+        # Valor en la punta de cada barra; el nombre del canal solo en la fila de
+        # arriba, como etiqueta directa que acompana a la leyenda.
+        ax.text(f + 0.6, yi + desp, pc(f) + ("  canal financiero" if yi == arriba else ""),
+                va="center", fontsize=8.5, color=config.TINTA)
+        ax.text(r + 0.6, yi - desp, pc(r) + ("  canal real" if yi == arriba else ""),
+                va="center", fontsize=8.5, color=config.TINTA_2)
+
+    ax.set_yticks(y)
+    ax.set_yticklabels(d["variable"], fontsize=9, color=config.TINTA)
+    ax.tick_params(axis="y", length=0)
+    ax.set_xlim(0, max(50, float(d[["real", "financiero"]].max().max()) * 1.2))
+    ax.xaxis.set_major_formatter(plt.FuncFormatter(lambda v, _: f"{v:.0f} %"))
+    ax.set_xlabel("porcentaje de la varianza del error de predicción")
+    ax.grid(axis="x")
+    ax.grid(axis="y", visible=False)
+    ax.set_axisbelow(True)
+    ax.spines["bottom"].set_visible(False)
+    ax.legend(loc="lower right", ncols=1)
+
+    rect = g.encabezado(
+        fig, "La tasa de la Fed explica mucho más que el ciclo económico de EE.UU.",
+        "Parte de la varianza de cada variable de Costa Rica que explica cada choque de "
+        "EE.UU., a 24 meses (cuenta financiera: 12 trimestres).\nDescomposición de "
+        "varianza de un VAR 2015-2025, identificación de Cholesky con EE.UU. primero.",
+        alto=0.91)
+    fig.tight_layout(rect=rect)
+    # La nota lleva una salvedad que importa: va en tinta secundaria, no en la tenue.
+    fig.text(0.01, -0.01, "Exportaciones: la ventaja del canal financiero no resiste el "
+             "cambio de orden de identificación (ver salidas/robustez_cholesky.md). "
+             "Elaboración propia con datos de FRED y BCCR.",
+             fontsize=8, color=config.TINTA_2, ha="left", va="top")
+    return g.guardar(fig, "00_resumen_canales")
+
+
 def fig_canales(t_canales: pd.DataFrame, nombre_bloque: str, demo: bool = False,
                 etiquetas: dict[str, str] | None = None):
     """Barras agrupadas: canal real frente a canal financiero por horizonte."""
