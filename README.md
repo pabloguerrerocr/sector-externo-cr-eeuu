@@ -1,205 +1,239 @@
-# Efecto del ciclo económico y la política monetaria de EE.UU. sobre el sector externo de Costa Rica, 2015–2025
+# ¿Qué mueve al sector externo de Costa Rica: el ciclo de EE. UU. o la tasa de la Fed?
 
-**[Explorar el tablero interactivo →](https://pabloguerrerocr.github.io/tfg/)** · [Resumen de 2 páginas en PDF](https://pabloguerrerocr.github.io/tfg/resumen.pdf)
+Investigación econométrica en Python con datos públicos de FRED y del Banco Central de
+Costa Rica (BCCR), 2015-2025.
+**[Tablero interactivo](https://pabloguerrerocr.github.io/tfg/)** ·
+[Resumen de 2 páginas (PDF)](https://pabloguerrerocr.github.io/tfg/resumen.pdf)
 
-Investigación con **datos reales y públicos** sobre cómo se transmiten a Costa Rica
-los dos canales por los que Estados Unidos afecta a una economía pequeña y abierta:
-el **canal real** (su ciclo económico mueve la demanda de exportaciones) y el
-**canal financiero** (la tasa de la Fed mueve los flujos de capital).
+**Respuesta corta: la tasa de la Fed.** Explica entre el 26 % y el 44 % de la variación
+de las reservas internacionales, la tasa de política del BCCR, el tipo de cambio real y
+la cuenta financiera. El ciclo económico de EE. UU. no pasa del 5 % en ninguna de ellas.
 
-El pipeline corre de punta a punta: lee los datos, prueba raíces unitarias, prueba
-cointegración, estima tres bloques VAR/VECM, y produce 26 figuras a 300 dpi, 31
-tablas y un reporte en markdown.
+![La tasa de la Fed explica mucho más que el ciclo económico de EE. UU.](salidas/figuras/00_resumen_canales.png)
 
-> **Autoría.** Este repositorio es trabajo propio de José Pablo Guerrero Chaves y
-> corresponde a su Trabajo Final de Graduación (Licenciatura en Economía,
-> Universidad Latina de Costa Rica), con anteproyecto aprobado. Los datos son
-> públicos: FRED y el portal de indicadores del BCCR. El historial de commits
-> documenta la autoría y las fechas.
+## Pregunta
 
-## Resultado principal
+Estados Unidos afecta a una economía pequeña y abierta como Costa Rica por dos canales:
 
-**El canal financiero domina al canal real en las 14 combinaciones de variable y
-horizonte que produce el pipeline.** Porcentaje de la varianza del error de
-predicción atribuido a cada canal:
+- **Canal real.** Cuando la economía estadounidense crece, compra más exportaciones
+  costarricenses.
+- **Canal financiero.** Cuando la Reserva Federal sube su tasa, cambian los flujos de
+  capital, el tipo de cambio, las reservas y la política del BCCR.
 
-| Variable de Costa Rica | Bloque | Horizonte | Canal real | Canal financiero |
-|---|---|---:|---:|---:|
-| Reservas internacionales netas | financiero | 24 meses | 3,3 % | **44,4 %** |
-| Tasa de política monetaria del BCCR | financiero | 24 meses | 0,6 % | **43,9 %** |
-| ITCER (competitividad) | comercial | 24 meses | 4,5 % | **43,2 %** |
-| Exportaciones FOB | comercial | 24 meses | 6,2 % | 10,4 % |
-| Cuenta financiera de la balanza de pagos | balanza de pagos | 12 trimestres | 2,8 % | **26,1 %** |
+¿Cuál de los dos pesó más entre 2015 y 2025?
 
-![Canal real frente a canal financiero](salidas/figuras/13_canal_real_vs_financiero_financiero.png)
+## Tres hallazgos
 
-La lectura no es que el canal real no exista, sino que **es débil frente al
-financiero incluso en la variable donde debería mandar**: sobre las exportaciones,
-el canal real explica 6,2 % a dos años. La transmisión de EE.UU. a Costa Rica en
-este período pasa mucho más por la tasa de la Fed que por el ciclo industrial
-estadounidense.
+**1. El canal financiero domina en las 14 combinaciones de variable y horizonte.**
+A 24 meses, la tasa de la Fed explica el 44,4 % de la varianza del error de predicción
+de las reservas internacionales netas, el 43,9 % de la tasa de política del BCCR y el
+43,2 % del tipo de cambio real (ITCER). El ciclo industrial de EE. UU. explica 3,3 %,
+0,6 % y 4,5 %, respectivamente. En la cuenta financiera, a 12 trimestres: 26,1 % frente
+a 2,8 %.
 
-Los detalles, con las pruebas de diagnóstico y las limitaciones, están en
-[`salidas/reporte.md`](salidas/reporte.md).
+**2. No depende del supuesto de identificación, salvo en las exportaciones.** Con la
+descomposición generalizada de Pesaran y Shin (1998), que no depende del orden de las
+variables, el canal financiero sigue ganando en 14 de 14 casos: explica entre 23,6 % y
+38,9 % de reservas, tasa del BCCR, ITCER y cuenta financiera, y el canal real no pasa de
+4,6 %. La excepción son las exportaciones, justo donde el canal real debería mandar: si
+la Fed se ordena antes que el ciclo, el ciclo explica 8,9 % y la Fed 7,7 %. Sobre
+exportaciones el resultado no es concluyente.
 
-### Cómo responde Costa Rica a un alza de la Fed
+**3. Tras un alza de la Fed, el BCCR sube su tasa y las reservas suben, no caen.** Ante
+un choque de una desviación estándar en la tasa de fondos federales (+0,11 puntos
+porcentuales al impacto), la tasa del BCCR sube hasta +0,42 pp a los 7 meses, cuando la
+propia tasa de la Fed va en +0,28 pp; la respuesta es significativa del mes 0 al 12. Las
+reservas suben cerca de 4 % a los 24 meses (banda al 95 %: de +1 % a +6 %). Es lo
+contrario de la historia clásica de fuga de capitales y coincide con 2022-2024: la tasa
+de la Fed pasó de 0,08 % a 5,33 % entre enero de 2022 y agosto de 2023, y las reservas
+de Costa Rica se duplicaron entre enero de 2022 y diciembre de 2024 (de unos US$6.800
+a US$14.200 millones). Es una regularidad de ese período, no una ley general.
 
-![Respuesta al impulso](salidas/figuras/11_impulso_respuesta_financiero.png)
+![Respuestas al impulso, bloque financiero](salidas/figuras/11_impulso_respuesta_financiero.png)
 
-Las bandas son intervalos bootstrap. Donde la banda cruza el cero, el efecto no
-es distinguible de cero: eso también es un resultado y se reporta.
+*Respuesta de las reservas (en logaritmos: 0,04 ≈ 4 %) y de la tasa del BCCR (en puntos
+porcentuales) a un choque en el ciclo de EE. UU. (izquierda) y en la tasa de la Fed
+(derecha). Donde la banda cruza el cero, el efecto no es distinguible de cero.*
 
-## Correr
+## Datos
+
+Todo es público y está versionado en el repositorio, así que el análisis corre sin
+conexión. Muestra: enero de 2015 a diciembre de 2025 (132 meses, 44 trimestres).
+
+| Variable | Fuente | Serie o cuadro | Frecuencia y tratamiento |
+|---|---|---|---|
+| Producción industrial de EE. UU. (ciclo real) | FRED | [`INDPRO`](https://fred.stlouisfed.org/series/INDPRO) | mensual, logaritmo |
+| PIB real de EE. UU. (ciclo real, bloque trimestral) | FRED | [`GDPC1`](https://fred.stlouisfed.org/series/GDPC1) | trimestral, logaritmo |
+| Tasa de fondos federales (canal financiero) | FRED | [`FEDFUNDS`](https://fred.stlouisfed.org/series/FEDFUNDS) | mensual, nivel |
+| Exportaciones FOB | BCCR | Exportaciones FOB acumuladas, total, cifras preliminares (FUES) | mensual; se desacumula; logaritmo |
+| Tipo de cambio real | BCCR | Índice de tipo de cambio efectivo real multilateral (ITCER), base enero 1997 = 100 | mensual, logaritmo |
+| Reservas internacionales netas | BCCR | Reservas netas del Banco Central | saldo a fin de mes, logaritmo |
+| Tasa de política monetaria | BCCR | Tasa de política monetaria | diaria a promedio mensual |
+| Cuenta financiera | BCCR | Balanza de pagos trimestral (MBP6), cuenta financiera | trimestral, nivel (cambia de signo) |
+
+FRED es la base de datos del Banco de la Reserva Federal de San Luis. Los cuadros del
+BCCR vienen de su
+[portal de indicadores económicos](https://sdd.bccr.fi.cr/es/IndicadoresEconomicos/Inicio/)
+y están en `data/raw/` tal como los exporta el portal. El BCCR publica las exportaciones
+acumuladas en el año; el código las convierte en flujos mensuales y verifica en cada
+corrida que la suma de los flujos de cada año reproduce el acumulado de diciembre
+(diferencia máxima de 2e-12 en 31 años). Para la parte descriptiva también se usan el
+bono del Tesoro a 2 años (`DGS2`), el índice amplio del dólar (`DTWEXBGS`), el tipo de
+cambio de venta y el balance comercial.
+
+## Método
+
+1. **Orden de integración.** ADF y KPSS, que tienen hipótesis nulas opuestas, en niveles
+   y en primeras diferencias. Cuando se contradicen, la serie queda marcada como
+   «ambigua» en lugar de forzar una conclusión.
+2. **Cointegración.** Johansen (prueba de la traza, 5 %) y Engle-Granger par a par.
+   Donde el rango es positivo se estima además un VECM.
+3. **Tres VAR por bloques.** Los tres comparten las dos variables de EE. UU. (ciclo y
+   tasa de la Fed) y cambian las de Costa Rica: *comercial* (exportaciones e ITCER),
+   *financiero* (reservas y tasa del BCCR) y *balanza de pagos* (cuenta financiera,
+   trimestral). Así cada modelo tiene 3 o 4 variables y no se sobreparametriza. Son VAR
+   en niveles, consistentes aun con raíces unitarias y cointegración (Sims, Stock y
+   Watson, 1990), con rezagos elegidos por HQIC (3, 3 y 2) y una variable dummy para el
+   choque del COVID (marzo a agosto de 2020).
+4. **Identificación.** Cholesky con EE. UU. primero: se supone que Costa Rica no mueve
+   a EE. UU. dentro del mismo período. La **descomposición de la varianza** a 6, 12 y
+   24 meses responde la pregunta. Las **funciones impulso-respuesta** llevan bandas al
+   95 % por simulación (500 réplicas).
+5. **Robustez y diagnóstico.** Se repite con los cuatro órdenes de Cholesky que dejan a
+   EE. UU. primero y con la descomposición generalizada de Pesaran y Shin (1998). En
+   cada bloque se prueban autocorrelación (Portmanteau), normalidad (Jarque-Bera) y
+   estabilidad.
+
+## Cómo correrlo
 
 ```bash
+git clone https://github.com/pabloguerrerocr/sector-externo-cr-eeuu.git
+cd sector-externo-cr-eeuu
 pip install -r requirements.txt
-python main.py                          # los tres bloques
-python main.py --bloque financiero      # solo uno
+python main.py        # los tres bloques: unos 20 segundos, sin conexión
 ```
 
-Una corrida completa desde cero reproduce el reporte carácter por carácter salvo la
-fecha de generación.
-
-| Ruta | Qué es |
+| Comando | Qué hace |
 |---|---|
-| `salidas/reporte.md` | resultados narrados, con las tablas de cada prueba |
-| `salidas/figuras/*.png` | 26 figuras a 300 dpi |
-| `salidas/tablas/*.csv` | cada prueba estadística en su propio CSV |
-| `data/procesado/` | el panel armado y el registro de origen de cada serie |
+| `python main.py --bloque financiero` | corre un solo bloque (`comercial`, `financiero` o `balanza_pagos`) |
+| `python robustez_cholesky.py` | robustez al orden de identificación, en `salidas/robustez_cholesky.md` |
+| `python exportar_tablero.py` | tablas del tablero interactivo (bandas de las IRF y descomposición por especificación) |
+| `python main.py --descargar-fred` | baja la versión más reciente de FRED en lugar de usar la copia versionada |
 
-## Los datos
+Sin `--descargar-fred`, las series de EE. UU. salen de la copia local de FRED o, si no
+existe, del panel versionado en `data/procesado/`. Un clon nuevo reproduce así las tablas
+publicadas, con diferencias menores a 1e-8 (ruido de punto flotante entre sistemas).
+Probado con Python 3.13, pandas 3.1 y statsmodels 0.15. Con `--descargar-fred` los
+números pueden moverse un poco, porque FRED revisa sus series.
 
-**Estados Unidos — FRED**, público y sin llave. Se cachea en `data/raw/cache/`
-porque FRED limita la frecuencia de peticiones y el análisis tiene que poder
-correr sin red.
-
-| Serie | Código |
+| Salida | Contenido |
 |---|---|
-| Producción industrial (ciclo real, mensual) | `INDPRO` |
-| Tasa de fondos federales | `FEDFUNDS` |
-| PIB real trimestral | `GDPC1` |
-| Bono del Tesoro a 2 años | `DGS2` |
-| Índice amplio del dólar | `DTWEXBGS` |
-
-**Costa Rica — BCCR**, descargados a mano del portal público de indicadores
-económicos (https://sdd.bccr.fi.cr/es/IndicadoresEconomicos/Inicio/) y puestos en
-`data/raw/`. Son cuadros abiertos, sin login ni credenciales:
-
-| Archivo | Cuadro del BCCR | Tratamiento |
-|---|---|---|
-| `tipo_cambio.xlsx` | Contenedor/6?Cuadro=1 | diario → promedio mensual, columna de venta |
-| `balance_comercial.xlsx` | Contenedor/452?Cuadro=112 | **desacumulado**: el BCCR lo publica acumulado en el año |
-| `reservas.xlsx` | Contenedor/516?Cuadro=70 | saldo de fin de mes |
-| `tpm.xlsx` | Contenedor/358?Cuadro=223 | diario → promedio mensual |
-| `itcer.xlsx` | buscar «tipo de cambio efectivo real» en el portal | índice, base ene-1997 = 100 |
-| `exportaciones.xlsx` | buscar «exportaciones FOB acumuladas» en el portal | **desacumulado**, régimen definitivo |
-| `balanza_pagos.xlsx` | buscar «balanza de pagos trimestral MBP6» en el portal | trimestral, cuenta financiera |
-
-`src/bccr_excel.py` lee el formato exacto que exporta ese portal (encabezado en la
-fila 5) y resuelve la desacumulación. La verificación está en el código: la suma de
-los flujos mensuales de un año reproduce el acumulado de diciembre con diferencia 0.
-
-Para actualizar, se vuelven a bajar los Excel y se corre `main.py`. El portal carga
-los cuadros por JavaScript y tiene protección antibot, así que no hay forma
-razonable de automatizar la descarga sin el token del servicio web del BCCR.
-
-## Los tres bloques y por qué
-
-Cuatro variables con 132 observaciones mensuales es una relación sana entre
-parámetros y datos. Meter las siete en un solo VAR no lo sería. Los bloques
-comparten las variables de EE.UU. y cambian las de Costa Rica, de modo que la
-descomposición de varianza de cada uno contesta la misma pregunta sobre una parte
-distinta del sector externo:
-
-- **Bloque comercial** — `ipi_eeuu`, `ffr`, `export_cr`, `itcer` (132 obs, 3 rezagos)
-  El canal real y el financiero sobre las exportaciones y sobre la competitividad.
-- **Bloque financiero** — `ipi_eeuu`, `ffr`, `reservas`, `tpm` (132 obs, 3 rezagos)
-  La transmisión hacia las reservas y la respuesta de política del BCCR.
-- **Bloque balanza de pagos** — `pib_eeuu`, `ffr`, `cuenta_fin` (44 obs, 2 rezagos)
-  Los flujos de capital medidos directamente. Trimestral y deliberadamente
-  parsimonioso: con ~44 observaciones, tres variables es el techo defendible.
-
-`tc_venta` y `balcom` se construyen y quedan en el panel, pero **no entran en
-ningún bloque**: el ITCER es mejor medida de competitividad que el tipo de cambio
-nominal, y las exportaciones son más informativas que el saldo comercial neto.
-
-## Decisiones metodológicas que hay que poder defender
-
-- **Identificación de Cholesky con EE.UU. ordenado primero.** Costa Rica es una
-  economía pequeña y abierta: no se le supone efecto contemporáneo sobre EE.UU. Es
-  razonable, pero es un supuesto. Conviene reportar la robustez invirtiendo el orden
-  de las dos variables ticas.
-- **Dummy exógena para el COVID** (marzo–agosto 2020, y 2020T1–2020T2 en el bloque
-  trimestral). Sin ese control, 2020 domina la estimación y las respuestas al
-  impulso se vuelven irreconocibles.
-- **Rezagos por HQIC.** AIC sobreparametriza con muestras cortas y BIC se queda
-  corto. El CSV `06_seleccion_rezagos_*` trae los tres criterios.
-- **ADF y KPSS juntos.** Tienen hipótesis nulas opuestas. Cuando se contradicen, la
-  fila queda marcada como `ambiguo` en vez de forzar una conclusión.
-- **Producción industrial como medida mensual del ciclo real.** El PIB solo existe
-  trimestral y 44 trimestres no alcanzan para un VAR mensual. Es una decisión de
-  frecuencia, no una equivalencia. El bloque trimestral sí usa el PIB.
+| `salidas/reporte.md` | resultados narrados, con la tabla de cada prueba |
+| `salidas/figuras/` | 27 figuras a 300 dpi |
+| `salidas/tablas/` | 34 tablas CSV, una por prueba |
+| `data/procesado/` | paneles mensual y trimestral, y el origen de cada serie |
 
 ## Limitaciones
 
-- **Hay autocorrelación remanente en los tres bloques.** El Portmanteau rechaza la
-  nula en comercial (p = 0,0004), financiero (p = 0,0063) y balanza de pagos
-  (p = 0,0252). Está en `08_diagnosticos_*.csv`. Obliga a leer los intervalos de
-  confianza de las respuestas al impulso con cautela.
-- **Los residuos no son normales en los dos bloques mensuales** (Jarque-Bera
-  rechaza con p = 0). En el bloque trimestral no se rechaza (p = 0,377). Es habitual
-  en series macro con el choque de 2020 adentro.
-- **Las reservas suben tras un alza de la Fed**, que es lo contrario de la historia
-  clásica de fuga de capitales. Casi seguro refleja el episodio 2022–2024, cuando
-  Costa Rica acumuló reservas de forma agresiva mientras la Fed subía. Es una
-  correlación de ese período, no una ley general, y así hay que presentarla.
-- **El bloque trimestral tiene 44 observaciones.** Con 3 variables y 2 rezagos está
-  en el límite de lo estimable. Sus resultados son indicativos, no concluyentes, y
-  por eso se reportan a 6 y 12 trimestres y no más lejos.
-- **La descomposición de varianza depende del orden de Cholesky,** y la conclusión
-  resiste el cambio. `robustez_cholesky.py` lo prueba sin descargar nada (resultados
-  en `salidas/robustez_cholesky.md`):
+- **Autocorrelación remanente** en los tres bloques (Portmanteau: p = 0,0004, 0,0063 y
+  0,0252). Las bandas de las respuestas al impulso se leen con cautela.
+- **Residuos no normales** en los bloques mensuales (Jarque-Bera, p < 0,001), algo
+  habitual con 2020 en la muestra. En el bloque trimestral no se rechaza la normalidad
+  (p = 0,377).
+- **El bloque trimestral tiene 44 observaciones.** Sus resultados son indicativos y se
+  reportan solo a 6 y 12 trimestres.
+- **Es una asociación dinámica del período, no una ley.** Los años 2022-2024, con el
+  alza de la Fed y la acumulación de reservas, pesan mucho en la estimación.
+- **Aproximaciones de medida.** La producción industrial aproxima el ciclo real mensual,
+  porque el PIB solo existe trimestral. El ITCER es multilateral, no bilateral con
+  EE. UU.
 
-  | Especificación | Domina el canal financiero |
-  |---|---:|
-  | Base (EE.UU. primero, ciclo real antes que la Fed) | 14 de 14 |
-  | Variables ticas invertidas | 12 de 12 |
-  | Variables de EE.UU. invertidas (la Fed primero) | 11 de 14 |
-  | Generalizada de Pesaran y Shin (no depende del orden) | **14 de 14** |
+<details>
+<summary><b>Más detalle: bloques, cointegración, robustez completa y actualización de datos</b></summary>
 
-  Invertir las variables ticas **no mueve ningún porcentaje**: con Cholesky, la
-  parte que explican los choques de EE.UU. no depende del orden de las variables
-  que van después. La prueba que importa es invertir las de EE.UU. Ahí solo cambian
-  las **exportaciones**, que ya eran casi un empate (8,9 % real contra 7,7 %
-  financiero a 24 meses): sobre esa variable el resultado no es concluyente. Sobre
-  reservas, tasa del BCCR, ITCER y cuenta financiera, el canal financiero domina en
-  todas las especificaciones; con la descomposición generalizada explica entre
-  23,6 % y 38,9 %, y el real no pasa de 4,6 %.
+### Por qué tres bloques y no un solo VAR
 
-## Las 26 figuras
+Con 132 observaciones mensuales, cuatro variables es una relación sana entre parámetros y
+datos; las siete juntas no lo serían. Como todos los bloques comparten las variables de
+EE. UU., la descomposición de varianza de cada uno contesta la misma pregunta sobre una
+parte distinta del sector externo. El tipo de cambio nominal y el balance comercial se
+construyen pero no entran en los modelos: el ITCER mide mejor la competitividad y las
+exportaciones son más informativas que el saldo neto.
 
-El pipeline produce 26 figuras a 300 dpi en `salidas/figuras/`. Las más útiles
-para entender el trabajo sin clonarlo:
+### Orden de integración y cointegración
+
+En los bloques mensuales todas las series son I(1). En el trimestral, con 44
+observaciones, el PIB de EE. UU. y la cuenta financiera salen estacionarios y la tasa de
+la Fed queda ambigua, así que el rango 1 que encuentra Johansen puede reflejar eso más que
+un equilibrio de largo plazo. Johansen encuentra rango 0 en el bloque comercial y rango 1
+en el financiero. En el VECM del bloque financiero solo se ajustan significativamente las
+variables de EE. UU. (p < 0,001); las reservas (p = 0,09) y la tasa del BCCR (p = 0,13)
+no. Por eso el análisis descansa en el VAR en niveles y no en el vector de largo plazo.
+
+### Robustez completa al orden de identificación
+
+| Especificación | Combinaciones donde domina el canal financiero |
+|---|---:|
+| Base: EE. UU. primero, ciclo antes que la Fed | 14 de 14 |
+| Variables de Costa Rica invertidas | 12 de 12 |
+| Variables de EE. UU. invertidas (la Fed primero) | 11 de 14 |
+| Ambos pares invertidos | 9 de 12 |
+| Generalizada de Pesaran y Shin (no depende del orden) | 14 de 14 |
+
+Invertir las variables de Costa Rica no mueve ningún porcentaje: con Cholesky, lo que
+explican los choques de EE. UU. no depende del orden de las variables que van después.
+La prueba que importa es invertir las de EE. UU., y ahí solo cambian las tres
+combinaciones de exportaciones. El bloque trimestral tiene una sola variable de Costa
+Rica, por eso dos especificaciones cuentan 12 combinaciones y no 14. Detalle en
+[`salidas/robustez_cholesky.md`](salidas/robustez_cholesky.md).
+
+### Actualizar los datos de Costa Rica
+
+Se vuelven a bajar los Excel del portal del BCCR, se reemplazan en `data/raw/` y se corre
+`main.py`. El portal carga los cuadros con JavaScript y tiene protección contra bots, así
+que la descarga es manual.
+
+| Archivo | Cuadro del BCCR | Tratamiento |
+|---|---|---|
+| `tipo_cambio.xlsx` | Contenedor/6?Cuadro=1 | diario a promedio mensual, columna de venta |
+| `balance_comercial.xlsx` | Contenedor/452?Cuadro=112 | se desacumula |
+| `reservas.xlsx` | Contenedor/516?Cuadro=70 | saldo de fin de mes |
+| `tpm.xlsx` | Contenedor/358?Cuadro=223 | diario a promedio mensual |
+| `itcer.xlsx` | buscar «tipo de cambio efectivo real» en el portal | índice, base enero 1997 = 100 |
+| `exportaciones.xlsx` | buscar «exportaciones FOB acumuladas» en el portal | se desacumula; columna total, preliminares |
+| `balanza_pagos.xlsx` | buscar «balanza de pagos trimestral MBP6» en el portal | trimestral, cuenta financiera |
+
+### Otras figuras útiles
 
 | Figura | Qué muestra |
 |---|---|
-| [`06_correlaciones.png`](salidas/figuras/06_correlaciones.png) | matriz de correlación entre las 12 series |
-| [`08_niveles_vs_diferencias_comercial.png`](salidas/figuras/08_niveles_vs_diferencias_comercial.png) | por qué hay que diferenciar antes de estimar |
-| [`10_johansen_financiero.png`](salidas/figuras/10_johansen_financiero.png) | la traza de Johansen contra su valor crítico |
+| [`02_fed_vs_bccr.png`](salidas/figuras/02_fed_vs_bccr.png) | la tasa de la Fed y la del BCCR en un mismo eje |
 | [`12_descomposicion_varianza_financiero.png`](salidas/figuras/12_descomposicion_varianza_financiero.png) | la descomposición completa, no solo los dos canales |
+| [`08_niveles_vs_diferencias_comercial.png`](salidas/figuras/08_niveles_vs_diferencias_comercial.png) | por qué hay que tratar las raíces unitarias |
+| [`06_correlaciones.png`](salidas/figuras/06_correlaciones.png) | correlaciones entre las tasas de variación de seis series |
+
+</details>
 
 ## Estructura
 
 ```
-config.py              periodo, series, bloques de modelación, paleta
-main.py                orquestador
-src/fuentes.py         descarga y caché de FRED
-src/bccr_excel.py      lector de los Excel del BCCR y desacumulación
-src/dataset.py         armado del panel mensual y trimestral
-src/graficos.py        estilo único de todas las figuras
-src/descriptivo.py     estadísticas y figuras descriptivas
-src/estacionariedad.py ADF y KPSS
-src/cointegracion.py   Engle-Granger y Johansen
-src/modelo.py          VAR/VECM, Granger, IRF, descomposición de varianza
-src/reporte.py         arma salidas/reporte.md
+config.py               período, series, bloques de modelación y paleta
+main.py                 pipeline completo
+robustez_cholesky.py    robustez al orden de identificación
+exportar_tablero.py     tablas del tablero interactivo
+src/fuentes.py          FRED: copia local o descarga
+src/bccr_excel.py       lector de los Excel del BCCR y desacumulación verificada
+src/dataset.py          paneles mensual y trimestral
+src/estacionariedad.py  ADF y KPSS
+src/cointegracion.py    Engle-Granger y Johansen
+src/modelo.py           VAR y VECM, Granger, impulso-respuesta, descomposición de varianza
+src/descriptivo.py      estadísticas y figuras descriptivas
+src/graficos.py         estilo único de las figuras
+src/reporte.py          arma salidas/reporte.md
 ```
+
+## Autoría
+
+Trabajo propio de José Pablo Guerrero Chaves, correspondiente a su Trabajo Final de
+Graduación (Licenciatura en Economía, Universidad Latina de Costa Rica), con anteproyecto
+aprobado. El historial de commits documenta la autoría y las fechas.

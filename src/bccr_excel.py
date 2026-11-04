@@ -69,3 +69,21 @@ def desacumular(s: pd.Series) -> pd.Series:
     enero = s.index.month == 1
     flujo[enero] = s[enero]
     return flujo.dropna()
+
+
+def verificar_desacumulacion(acumulada: pd.Series, flujo: pd.Series,
+                             tolerancia: float = 1e-6) -> float:
+    """
+    Comprueba que la suma de los flujos de cada ano reproduce el acumulado de
+    diciembre. Solo mira anos completos (con enero y diciembre). Devuelve la
+    diferencia absoluta maxima y falla si supera la tolerancia.
+    """
+    con_enero = set(acumulada.index[acumulada.index.month == 1].year)
+    dic = acumulada[(acumulada.index.month == 12) & acumulada.index.year.isin(con_enero)]
+    suma = flujo.groupby(flujo.index.year).sum()
+    dif = (suma.reindex(dic.index.year).to_numpy() - dic.to_numpy())
+    maxima = float(abs(dif).max()) if len(dif) else 0.0
+    if not maxima <= tolerancia:
+        raise ValueError(f"La desacumulacion no cuadra: diferencia maxima {maxima:g} "
+                         f"entre la suma anual de los flujos y el acumulado de diciembre")
+    return maxima
